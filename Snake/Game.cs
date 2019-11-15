@@ -13,11 +13,12 @@ namespace Snake
         private bool gameOver = false;
         private bool foodIsEaten = false;
         private Food food = new Food(15, 15);
+        private Map map = new Map();
 
         public Game()
         {
             // Print the boundry
-            Boundry();
+            map.PaintMap();
 
             // Paint the snake head
             Console.SetCursorPosition(snake.X[0], snake.Y[0]);
@@ -62,7 +63,7 @@ namespace Snake
 
                 snake.Paint();
 
-                if (IsWallHit(snake.X[0], snake.Y[0])) gameOver = true;
+                if (map.IsWallHit(snake.X[0], snake.Y[0])) gameOver = true;
 
                 if (CheckIfFoodIsEaten()) foodIsEaten = true;
 
@@ -77,44 +78,6 @@ namespace Snake
                 if (Console.KeyAvailable) keyInfo = Console.ReadKey().Key;
             }
         }
-
-        
-
-        private void Boundry()
-        {
-            for(int i = 0; i < 78; i++)
-            {
-                Console.Write("#");
-            }
-            Console.SetCursorPosition(0, 27);
-            for (int i = 0; i < 78; i++)
-            {
-                Console.Write("#");
-            }
-            
-            for (int i = 0; i < 27; i++)
-            {
-                Console.SetCursorPosition(0, i);
-                Console.Write("#");
-            }
-
-            for (int i = 0; i < 28; i++)
-            {
-                Console.SetCursorPosition(78, i);
-                Console.Write("#");
-            }
-        }
-
-        private bool IsWallHit(int x, int y)
-        {
-            if (x == 0 || x == 78 || y == 0 || y == 27)
-            {
-                return true;
-            }
-
-            else return false;
-        }
-
         private bool CheckIfFoodIsEaten()
         {
             if(snake.X[0] == food.X & snake.Y[0] == food.Y)
