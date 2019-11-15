@@ -10,7 +10,6 @@ namespace Snake
     {
         //(keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape
         private Snake snake = new Snake();
-        private Random random = new Random();
         private bool gameOver = false;
         private bool foodIsEaten = false;
         private Food food = new Food(15, 15);
@@ -27,9 +26,7 @@ namespace Snake
             Console.WriteLine((char)2);
 
             // Paint the food
-            Console.SetCursorPosition(food.X, food.Y);
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(food.SnakeFood);
+            Console.WriteLine(food);
         }
 
         public void StartGame()
@@ -72,7 +69,7 @@ namespace Snake
 
                 if (foodIsEaten)
                 {
-                    PaintFood();
+                    Console.WriteLine(food);
                     foodIsEaten = false;
                 }
 
@@ -107,17 +104,6 @@ namespace Snake
                 snake.X[i] = snake.X[i - 1];
                 snake.Y[i] = snake.Y[i - 1];
             }
-        }
-        private void PaintFood()
-        {
-            food.X = random.Next(1, 77);
-            food.Y = random.Next(1, 26);
-
-            Console.SetCursorPosition(food.X, food.Y);
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(food.SnakeFood);
-
-
         }
 
         private void Boundry()

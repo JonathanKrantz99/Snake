@@ -11,6 +11,7 @@ namespace Snake
         private int x;
         private int y;
         private string snakeFood = "o";
+        private Random random = new Random();
         public Food(int x, int y)
         {
             this.X = x;
@@ -34,5 +35,16 @@ namespace Snake
             get { return this.snakeFood; }
         }
 
+        public override string ToString()
+        {
+            this.X = random.Next(1, 77);
+            this.Y = random.Next(1, 26);
+
+            Console.SetCursorPosition(this.X, this.Y);
+            Console.ForegroundColor = ConsoleColor.Red;
+            return this.SnakeFood;
+        }
+        
+        
     }
 }
