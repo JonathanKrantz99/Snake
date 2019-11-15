@@ -11,11 +11,11 @@ namespace Snake
         private int x;
         private int y;
         private string snakeFood = "o";
+        private bool isEaten = false;
         private Random random = new Random();
-        public Food(int x, int y)
+
+        public Food()
         {
-            this.X = x;
-            this.Y = y;
         }
 
         public int X
@@ -28,6 +28,12 @@ namespace Snake
         {
             get { return this.y; }
             set { this.y = value; }
+        }
+
+        public bool IsEaten
+        {
+            get { return this.isEaten; }
+            set { this.isEaten = value; }
         }
 
         public string SnakeFood

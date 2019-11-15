@@ -8,22 +8,23 @@ namespace Snake
 {
     class Game
     {
-        //(keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape
-        private Snake snake = new Snake();
-        private bool gameOver = false;
-        private bool foodIsEaten = false;
-        private Food food = new Food(15, 15);
+        public Snake snake = new Snake();
+        private Food food = new Food();
         private Map map = new Map();
-
+        private bool gameOver = false;
+        private bool goingUp = false;
+        private bool goingDown = false;
+        private bool goingLeft = false;
+        private bool goingRight = false;
         public Game()
         {
-            // Print the boundry
+            // paint the boundry
             map.PaintMap();
 
             // Paint the snake head
             Console.SetCursorPosition(snake.X[0], snake.Y[0]);
-            Console.ForegroundColor = snake.SnakeColor;
-            Console.WriteLine((char)2);
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("O");
 
             // Paint the food
             Console.WriteLine(food);
@@ -34,59 +35,131 @@ namespace Snake
             ConsoleKey keyInfo = Console.ReadKey().Key;
             while (gameOver == false)
             {
-                switch (keyInfo)
-                {
-                    case ConsoleKey.W:
-                        Console.SetCursorPosition(snake.X[0], snake.Y[0]);
-                        Console.Write(" ");
-                        snake.Y[0]--;
-                        break;
-
-                    case ConsoleKey.S:
-                        Console.SetCursorPosition(snake.X[0], snake.Y[0]);
-                        Console.Write(" ");
-                        snake.Y[0]++;
-                        break;
-
-                    case ConsoleKey.A:
-                        Console.SetCursorPosition(snake.X[0], snake.Y[0]);
-                        Console.Write(" ");
-                        snake.X[0]--;
-                        break;
-
-                    case ConsoleKey.D:
-                        Console.SetCursorPosition(snake.X[0], snake.Y[0]);
-                        Console.Write(" ");
-                        snake.X[0]++;
-                        break;
-                }
+                Move(keyInfo);
 
                 snake.Paint();
 
-                if (map.IsWallHit(snake.X[0], snake.Y[0])) gameOver = true;
-
-                if (CheckIfFoodIsEaten()) foodIsEaten = true;
-
-                if (foodIsEaten)
+                if (map.IsWallHit(snake.X[0], snake.Y[0]))
                 {
-                    Console.WriteLine(food);
-                    foodIsEaten = false;
+                    gameOver = true;
                 }
 
-                System.Threading.Thread.Sleep(50);
+                if (CheckIfFoodIsEaten())
+                {
+                    food.IsEaten = true;
+                }
+
+                if (food.IsEaten)
+                {
+                    Console.WriteLine(food);
+                    food.IsEaten = false;
+                }
+
+                System.Threading.Thread.Sleep(70);
 
                 if (Console.KeyAvailable) keyInfo = Console.ReadKey().Key;
             }
         }
-        private bool CheckIfFoodIsEaten()
+
+        public bool CheckIfFoodIsEaten()
         {
-            if(snake.X[0] == food.X & snake.Y[0] == food.Y)
+            if (snake.X[0] == food.X & snake.Y[0] == food.Y)
             {
                 snake.Point++;
                 return true;
             }
 
             return false;
+        }
+
+        private void Move(ConsoleKey keyInfo)
+        {
+            switch (keyInfo)
+            {
+                case ConsoleKey.W:
+                    if (goingDown)
+                    {
+                        Console.SetCursorPosition(snake.X[0], snake.Y[0]);
+                        Console.Write(" ");
+                        snake.Y[0]++;
+                    }
+
+                    else
+                    {
+                        Console.SetCursorPosition(snake.X[0], snake.Y[0]);
+                        Console.Write(" ");
+                        snake.Y[0]--;
+
+                        goingUp = true;
+                        goingDown = false;
+                        goingLeft = false;
+                        goingRight = false;
+                    }
+                    break;
+
+                case ConsoleKey.S:
+                    if (goingUp)
+                    {
+                        Console.SetCursorPosition(snake.X[0], snake.Y[0]);
+                        Console.Write(" ");
+                        snake.Y[0]--;
+                    }
+
+                    else
+                    {
+                        Console.SetCursorPosition(snake.X[0], snake.Y[0]);
+                        Console.Write(" ");
+                        snake.Y[0]++;
+
+                        goingDown = true;
+                        goingUp = false;
+                        goingLeft = false;
+                        goingRight = false;
+                    }
+                    break;
+
+                case ConsoleKey.A:
+                    if (goingRight)
+                    {
+                        Console.SetCursorPosition(snake.X[0], snake.Y[0]);
+                        Console.Write(" ");
+                        snake.X[0]++;
+                    }
+
+                    else
+                    {
+                        Console.SetCursorPosition(snake.X[0], snake.Y[0]);
+                        Console.Write(" ");
+                        snake.X[0]--;
+
+                        goingLeft = true;
+                        goingUp = false;
+                        goingDown = false;
+                        goingRight = false;
+                    }
+                    break;
+
+                case ConsoleKey.D:
+                    if (goingLeft)
+                    {
+                        Console.SetCursorPosition(snake.X[0], snake.Y[0]);
+                        Console.Write(" ");
+                        snake.X[0]--;
+                    }
+
+                    else
+                    {
+                        Console.SetCursorPosition(snake.X[0], snake.Y[0]);
+                        Console.Write(" ");
+                        snake.X[0]++;
+
+                        goingRight = true;
+                        goingUp = false;
+                        goingDown = false;
+                        goingLeft = false;
+                    }
+                    break;
+            }
         }
     }
 }
