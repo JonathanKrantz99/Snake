@@ -11,19 +11,13 @@ namespace Snake
         private int[] x = new int[50];
         private int[] y = new int[50];
         private ConsoleColor snakeColor = ConsoleColor.Yellow;
+        private int point;
 
         public Snake()
         {
             this.X[0] = 50;
             this.Y[0] = 15;
         }
-
-        //public int SnakeLenght
-        //{
-        //    set { this.snakeLenght = value; }
-
-        //    get { return this.snakeLenght; }
-        //}
 
         public int[] X
         {
@@ -37,10 +31,42 @@ namespace Snake
             set { this.y = value; }
         }
 
+        public int Point
+        {
+            get { return this.point; }
+            set { this.point = value; }
+        }
+
         public ConsoleColor SnakeColor
         {
             get { return this.snakeColor; }
         }
 
+        public void Paint()
+        {
+            // Head
+            Console.SetCursorPosition(X[0], Y[0]);
+            Console.ForegroundColor = SnakeColor;
+            Console.WriteLine((char)2);
+
+            // Body
+            for (int i = 1; i < point + 1; i++)
+            {
+                Console.SetCursorPosition(X[i], Y[i]);
+                Console.ForegroundColor = SnakeColor;
+                Console.WriteLine("o");
+            }
+
+            // Erase last body part
+            Console.SetCursorPosition(X[point + 1], Y[point + 1]);
+            Console.WriteLine(" ");
+
+            // Update snake array
+            for (int i = point + 1; i > 0; i--)
+            {
+                X[i] = X[i - 1];
+                Y[i] = Y[i - 1];
+            }
+        }
     }
 }

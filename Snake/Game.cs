@@ -13,7 +13,6 @@ namespace Snake
         private bool gameOver = false;
         private bool foodIsEaten = false;
         private Food food = new Food(15, 15);
-        private int point = 0;
 
         public Game()
         {
@@ -61,7 +60,7 @@ namespace Snake
                         break;
                 }
 
-                PaintSnake();
+                snake.Paint();
 
                 if (IsWallHit(snake.X[0], snake.Y[0])) gameOver = true;
 
@@ -79,32 +78,7 @@ namespace Snake
             }
         }
 
-        private void PaintSnake()
-        {
-            // Head
-            Console.SetCursorPosition(snake.X[0], snake.Y[0]);
-            Console.ForegroundColor = snake.SnakeColor;
-            Console.WriteLine((char)2);
-
-            // Body
-            for(int i = 1; i < point + 1; i++)
-            {
-                Console.SetCursorPosition(snake.X[i], snake.Y[i]);
-                Console.ForegroundColor = snake.SnakeColor;
-                Console.WriteLine("o");
-            }
-
-            // Erase last body part
-            Console.SetCursorPosition(snake.X[point + 1], snake.Y[point + 1]);
-            Console.WriteLine(" ");
-
-            // Update snake array
-            for(int i = point+1; i > 0; i--)
-            {
-                snake.X[i] = snake.X[i - 1];
-                snake.Y[i] = snake.Y[i - 1];
-            }
-        }
+        
 
         private void Boundry()
         {
@@ -145,7 +119,7 @@ namespace Snake
         {
             if(snake.X[0] == food.X & snake.Y[0] == food.Y)
             {
-                point++;
+                snake.Point++;
                 return true;
             }
 
