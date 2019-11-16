@@ -50,6 +50,11 @@ namespace Snake
             {
                 Move(keyInfo);
 
+                if (snake.CheckSelfCollision())
+                {
+                    gameOver = true;
+                }
+
                 snake.Paint();
 
                 //if (snake.CheckSelfCollision())
