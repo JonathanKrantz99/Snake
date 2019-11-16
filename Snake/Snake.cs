@@ -10,7 +10,7 @@ namespace Snake
     {
         private int[] x = new int[50];
         private int[] y = new int[50];
-        private int point;
+        private int point = 0;
 
         public Snake()
         {

@@ -28,6 +28,13 @@ namespace Snake
 
             // Paint the food
             Console.WriteLine(food);
+
+            // Print the score
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.SetCursorPosition(95, 0);
+            Console.WriteLine("Score: {0}", snake.Point * 10);
+
+            StartGame();
         }
 
         public void StartGame()
@@ -66,6 +73,8 @@ namespace Snake
             if (snake.X[0] == food.X & snake.Y[0] == food.Y)
             {
                 snake.Point++;
+                Console.SetCursorPosition(95, 0);
+                Console.Write("Score: {0}", snake.Point*10);
                 return true;
             }
 
@@ -161,5 +170,6 @@ namespace Snake
                     break;
             }
         }
+
     }
 }

@@ -14,6 +14,8 @@ namespace Snake
 
         public void PaintMap()
         {
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.SetCursorPosition(0, 0);
             for (int i = 0; i < 78; i++)
             {
                 Console.Write("#");
