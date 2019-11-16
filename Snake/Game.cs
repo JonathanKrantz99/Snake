@@ -52,6 +52,11 @@ namespace Snake
 
                 snake.Paint();
 
+                //if (snake.CheckSelfCollision())
+                //{
+                //    gameOver = true;
+                //}
+
                 if (map.IsWallHit(snake.X[0], snake.Y[0]))
                 {
                     gameOver = true;
@@ -89,9 +94,9 @@ namespace Snake
                 snake.Point++;
                 Console.SetCursorPosition(86, 1);
                 Console.Write("Score: {0}", snake.Point*10);
+                Console.SetCursorPosition(0, 30);
                 return true;
             }
-
             return false;
         }
 

@@ -55,12 +55,24 @@ namespace Snake
             Console.SetCursorPosition(X[point + 1], Y[point + 1]);
             Console.WriteLine(" ");
 
-            // Update snake array
+            //Update snake array
             for (int i = point + 1; i > 0; i--)
             {
                 X[i] = X[i - 1];
                 Y[i] = Y[i - 1];
             }
+        }
+
+        public bool CheckSelfCollision()
+        {
+            for (int i = 2; i < Point; i++)
+            {
+                if (X[0] == X[i] & Y[0] == Y[i])
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
