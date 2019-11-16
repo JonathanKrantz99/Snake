@@ -43,9 +43,6 @@ namespace Snake
 
             StartGame();
         }
-
-        
-
         public void StartGame()
         {
             ConsoleKey keyInfo = Console.ReadKey().Key;
