@@ -10,6 +10,7 @@ namespace Snake
     {
         static void Main(string[] args)
         {
+            Console.SetWindowSize(109, 28);
             Console.CursorVisible = false;
             new Game();
 
@@ -27,16 +28,16 @@ namespace Snake
 
         private static bool PlayAgain()
         {
-            Console.SetCursorPosition(86, 5);
+            Console.SetCursorPosition(81, 5);
             Console.WriteLine("Do you want to play again?");
 
-            Console.SetCursorPosition(86, 6);
+            Console.SetCursorPosition(81, 6);
             Console.WriteLine("1. Yes");
 
-            Console.SetCursorPosition(86, 7);
+            Console.SetCursorPosition(81, 7);
             Console.WriteLine("2. No");
 
-            ConsoleKey answer = Console.ReadKey().Key;
+            ConsoleKey answer = Console.ReadKey(true).Key;
 
             while (true)
             {
@@ -52,16 +53,16 @@ namespace Snake
 
                 else
                 {
-                    Console.SetCursorPosition(86, 5);
+                    Console.SetCursorPosition(81, 5);
                     Console.WriteLine("Do you want to play again?");
 
-                    Console.SetCursorPosition(86, 6);
+                    Console.SetCursorPosition(81, 6);
                     Console.WriteLine("1. Yes");
 
-                    Console.SetCursorPosition(86, 7);
+                    Console.SetCursorPosition(81, 7);
                     Console.WriteLine("2. No");
 
-                    answer = Console.ReadKey().Key;
+                    answer = Console.ReadKey(true).Key;
                 }
             }
         }

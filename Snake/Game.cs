@@ -33,19 +33,19 @@ namespace Snake
 
             // Print the score
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.SetCursorPosition(86, 1);
+            Console.SetCursorPosition(81, 1);
             Console.WriteLine("Score: {0}", snake.Point * 10);
 
             // Print highscore
             ReadFromFile();
-            Console.SetCursorPosition(86, 0);
+            Console.SetCursorPosition(81, 0);
             Console.WriteLine("Highscore: {0}", highScore);
 
             StartGame();
         }
         public void StartGame()
         {
-            ConsoleKey keyInfo = Console.ReadKey().Key;
+            ConsoleKey keyInfo = Console.ReadKey(true).Key;
             while (gameOver == false)
             {
                 Move(keyInfo);
@@ -56,11 +56,6 @@ namespace Snake
                 }
 
                 snake.Paint();
-
-                //if (snake.CheckSelfCollision())
-                //{
-                //    gameOver = true;
-                //}
 
                 if (map.IsWallHit(snake.X[0], snake.Y[0]))
                 {
@@ -80,7 +75,7 @@ namespace Snake
 
                 System.Threading.Thread.Sleep(70);
 
-                if (Console.KeyAvailable) keyInfo = Console.ReadKey().Key;
+                if (Console.KeyAvailable) keyInfo = Console.ReadKey(true).Key;
             }
 
             if(snake.Point*10 > highScore)
@@ -97,9 +92,8 @@ namespace Snake
             if (snake.X[0] == food.X & snake.Y[0] == food.Y)
             {
                 snake.Point++;
-                Console.SetCursorPosition(86, 1);
+                Console.SetCursorPosition(81, 1);
                 Console.Write("Score: {0}", snake.Point*10);
-                Console.SetCursorPosition(0, 30);
                 return true;
             }
             return false;

@@ -43,8 +43,8 @@ namespace Snake
 
         public override string ToString()
         {
-            this.X = random.Next(1, 77);
-            this.Y = random.Next(1, 26);
+            this.X = random.Next(2, 77);
+            this.Y = random.Next(2, 26);
 
             Console.SetCursorPosition(this.X, this.Y);
             Console.ForegroundColor = ConsoleColor.Red;
