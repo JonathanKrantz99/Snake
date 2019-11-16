@@ -62,5 +62,17 @@ namespace Snake
                 Y[i] = Y[i - 1];
             }
         }
+
+        public bool CheckSelfCollision()
+        {
+            for (int i = 2; i < Point; i++)
+            {
+                if (X[0] == X[i] & Y[0] == Y[i])
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

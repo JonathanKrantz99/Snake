@@ -50,6 +50,11 @@ namespace Snake
             {
                 Move(keyInfo);
 
+                if (snake.CheckSelfCollision())
+                {
+                    gameOver = true;
+                }
+
                 snake.Paint();
 
                 if (map.IsWallHit(snake.X[0], snake.Y[0]))
