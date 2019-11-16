@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Snake
 {
@@ -11,6 +12,7 @@ namespace Snake
         public Snake snake = new Snake();
         private Food food = new Food();
         private Map map = new Map();
+        private int highScore = 0;
         private bool gameOver = false;
         private bool goingUp = false;
         private bool goingDown = false;
@@ -31,11 +33,18 @@ namespace Snake
 
             // Print the score
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.SetCursorPosition(95, 0);
+            Console.SetCursorPosition(86, 1);
             Console.WriteLine("Score: {0}", snake.Point * 10);
+
+            // Print highscore
+            ReadFromFile();
+            Console.SetCursorPosition(86, 0);
+            Console.WriteLine("Highscore: {0}", highScore);
 
             StartGame();
         }
+
+        
 
         public void StartGame()
         {
@@ -66,6 +75,14 @@ namespace Snake
 
                 if (Console.KeyAvailable) keyInfo = Console.ReadKey().Key;
             }
+
+            if(snake.Point*10 > highScore)
+            {
+                Console.SetCursorPosition(86, 3);
+                Console.WriteLine("New highscore!");
+            }
+
+            SaveToFile();
         }
 
         public bool CheckIfFoodIsEaten()
@@ -73,7 +90,7 @@ namespace Snake
             if (snake.X[0] == food.X & snake.Y[0] == food.Y)
             {
                 snake.Point++;
-                Console.SetCursorPosition(95, 0);
+                Console.SetCursorPosition(86, 1);
                 Console.Write("Score: {0}", snake.Point*10);
                 return true;
             }
@@ -171,5 +188,38 @@ namespace Snake
             }
         }
 
+        private void SaveToFile()
+        {
+            if(snake.Point*10 > highScore)
+            {
+                StreamWriter sparaTillFil = new StreamWriter("HighScore.txt");
+                using (sparaTillFil)
+                {
+                    sparaTillFil.WriteLine(snake.Point * 10);
+                }
+            }
+        }
+
+        private void ReadFromFile()
+        {
+            try
+            {
+                StreamReader reader = new StreamReader("HighScore.txt");
+                using (reader)
+                {
+                    string line = reader.ReadLine();
+                    highScore = Convert.ToInt32(line);
+                }
+            }
+            
+            catch (FileNotFoundException)
+            {
+                StreamWriter sparaTillFil = new StreamWriter("HighScore.txt");
+                using (sparaTillFil)
+                {
+                    sparaTillFil.WriteLine(snake.Point * 10);
+                }
+            }
+        }
     }
 }
