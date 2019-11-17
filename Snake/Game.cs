@@ -13,9 +13,9 @@ namespace Snake
         private Food food = new Food();
         private Map map = new Map();
         private Random random = new Random();
+        private List<Player> scoreBoard = new List<Player>();
         private int highScore = 0;
         private int gameSpeed = 70;
-        private List<Player> scoreBoard = new List<Player>();
         private bool gameOver = false;
         private bool goingUp = false;
         private bool goingDown = false;
@@ -25,29 +25,7 @@ namespace Snake
         {
             this.scoreBoard = scoreBoard;
 
-            // paint the boundry
-            map.PaintMap();
-
-            // Paint the snake head
-            Console.SetCursorPosition(snake.X[0], snake.Y[0]);
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("O");
-
-            // Paint the food
-            Console.SetCursorPosition(food.X, food.Y);
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("o");
-
-            // Print the score
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.SetCursorPosition(81, 1);
-            Console.WriteLine("Score: {0}", snake.Point * 10);
-
-            // Print highscore
-            highScore = scoreBoard[0].Score;
-            Console.SetCursorPosition(81, 0);
-            Console.WriteLine("Highscore: {0}", highScore);
-
+            InitiateGame();
             StartGame();
         }
         public void StartGame()
@@ -71,19 +49,22 @@ namespace Snake
 
                 if (CheckIfFoodIsEaten())
                 {
-                    food.IsEaten = true;
-                    gameSpeed -= 1;
-                }
-
-                if (food.IsEaten)
-                {
                     PlaceFood();
-                    food.IsEaten = false;
+                    gameSpeed -= 1;
                 }
 
                 System.Threading.Thread.Sleep(gameSpeed);
 
-                if (Console.KeyAvailable) keyInfo = Console.ReadKey(true).Key;
+                if (Console.KeyAvailable)
+                {
+                    ConsoleKey lastKeyStroke = keyInfo;
+                    keyInfo = Console.ReadKey(true).Key;
+
+                    if (keyInfo != ConsoleKey.W & keyInfo != ConsoleKey.A & keyInfo != ConsoleKey.S & keyInfo != ConsoleKey.D)
+                    {
+                        keyInfo = lastKeyStroke;
+                    }
+                }
             }
 
             if (snake.Point * 10 > highScore)
@@ -91,25 +72,14 @@ namespace Snake
                 Console.SetCursorPosition(86, 3);
                 Console.WriteLine("New highscore!");
             }
+
             SaveToFile();
 
-            if (Program.PlayAgain())
+            if (PlayAgain())
             {
                 Console.Clear();
                 new Game(scoreBoard);
             }
-        }
-
-        public bool CheckIfFoodIsEaten()
-        {
-            if (snake.X[0] == food.X & snake.Y[0] == food.Y)
-            {
-                snake.Point++;
-                Console.SetCursorPosition(81, 1);
-                Console.Write("Score: {0}", snake.Point * 10);
-                return true;
-            }
-            return false;
         }
 
         private void Move(ConsoleKey keyInfo)
@@ -130,10 +100,8 @@ namespace Snake
                         Console.Write(" ");
                         snake.Y[0]--;
 
+                        SetDirectionsToFalse();
                         goingUp = true;
-                        goingDown = false;
-                        goingLeft = false;
-                        goingRight = false;
                     }
                     break;
 
@@ -151,10 +119,8 @@ namespace Snake
                         Console.Write(" ");
                         snake.Y[0]++;
 
+                        SetDirectionsToFalse();
                         goingDown = true;
-                        goingUp = false;
-                        goingLeft = false;
-                        goingRight = false;
                     }
                     break;
 
@@ -172,10 +138,8 @@ namespace Snake
                         Console.Write(" ");
                         snake.X[0]--;
 
+                        SetDirectionsToFalse();
                         goingLeft = true;
-                        goingUp = false;
-                        goingDown = false;
-                        goingRight = false;
                     }
                     break;
 
@@ -193,13 +157,23 @@ namespace Snake
                         Console.Write(" ");
                         snake.X[0]++;
 
+                        SetDirectionsToFalse();
                         goingRight = true;
-                        goingUp = false;
-                        goingDown = false;
-                        goingLeft = false;
                     }
                     break;
             }
+        }
+
+        private bool CheckIfFoodIsEaten()
+        {
+            if (snake.X[0] == food.X & snake.Y[0] == food.Y)
+            {
+                snake.Point++;
+                Console.SetCursorPosition(81, 1);
+                Console.Write("Score: {0}", snake.Point * 10);
+                return true;
+            }
+            return false;
         }
 
         private void PlaceFood()
@@ -254,6 +228,79 @@ namespace Snake
             }
         }
 
-        
+        private void InitiateGame()
+        {
+            // paint the boundry
+            map.PaintMap();
+
+            // Paint the snake head
+            Console.SetCursorPosition(snake.X[0], snake.Y[0]);
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("O");
+
+            // Paint the food
+            Console.SetCursorPosition(food.X, food.Y);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("o");
+
+            // Print the score
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.SetCursorPosition(81, 1);
+            Console.WriteLine("Score: {0}", snake.Point * 10);
+
+            // Print highscore
+            highScore = scoreBoard[0].Score;
+            Console.SetCursorPosition(81, 0);
+            Console.WriteLine("Highscore: {0}", highScore);
+        }
+
+        private bool PlayAgain()
+        {
+            Console.SetCursorPosition(81, 5);
+            Console.WriteLine("Do you want to play again?");
+
+            Console.SetCursorPosition(81, 6);
+            Console.WriteLine("Press 1 for yes");
+
+            Console.SetCursorPosition(81, 7);
+            Console.WriteLine("Press 2 for no");
+
+            ConsoleKey answer = Console.ReadKey(true).Key;
+
+            while (true)
+            {
+                if (answer == ConsoleKey.D1)
+                {
+                    return true;
+                }
+
+                else if (answer == ConsoleKey.D2)
+                {
+                    return false;
+                }
+
+                else
+                {
+                    Console.SetCursorPosition(81, 5);
+                    Console.WriteLine("Do you want to play again?");
+
+                    Console.SetCursorPosition(81, 6);
+                    Console.WriteLine("1. Yes");
+
+                    Console.SetCursorPosition(81, 7);
+                    Console.WriteLine("2. No");
+
+                    answer = Console.ReadKey(true).Key;
+                }
+            }
+        }
+
+        private void SetDirectionsToFalse()
+        {
+            goingRight = false;
+            goingUp = false;
+            goingDown = false;
+            goingLeft = false;
+        }
     }
 }

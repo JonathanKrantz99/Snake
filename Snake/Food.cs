@@ -10,8 +10,6 @@ namespace Snake
     {
         private int x = 30;
         private int y = 15;
-        private string snakeFood = "o";
-        private bool isEaten = false;
 
         public Food()
         {
@@ -27,17 +25,6 @@ namespace Snake
         {
             get { return this.y; }
             set { this.y = value; }
-        }
-
-        public bool IsEaten
-        {
-            get { return this.isEaten; }
-            set { this.isEaten = value; }
-        }
-
-        public string SnakeFood
-        {
-            get { return this.snakeFood; }
         }
     }
 }
