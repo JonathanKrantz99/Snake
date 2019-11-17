@@ -53,5 +53,14 @@ namespace Snake
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("o");
         }
+
+        public bool IsEaten(int snakeXPos, int snakeYPos)
+        {
+            if (snakeXPos == X & snakeYPos == Y)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

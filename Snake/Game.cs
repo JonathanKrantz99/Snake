@@ -30,20 +30,15 @@ namespace Snake
             {
                 Move(direction);
 
-                if (snake.CheckSelfCollision())
-                {
-                    gameOver = true;
-                }
+                if (snake.CheckSelfCollision() || map.IsWallHit(snake.X[0], snake.Y[0])) gameOver = true;
 
                 snake.Paint();
 
-                if (map.IsWallHit(snake.X[0], snake.Y[0]))
+                if (food.IsEaten(snake.X[0], snake.Y[0]))
                 {
-                    gameOver = true;
-                }
-
-                if (CheckIfFoodIsEaten())
-                {
+                    snake.Point++;
+                    Console.SetCursorPosition(81, 1);
+                    Console.Write("Score: {0}", snake.Point * 10);
                     food.PlaceFood(snake.X, snake.Y);
                     gameSpeed -= 1;
                 }
@@ -135,18 +130,6 @@ namespace Snake
                     snake.X[0]++;
                     break;
             }
-        }
-
-        private bool CheckIfFoodIsEaten()
-        {
-            if (snake.X[0] == food.X & snake.Y[0] == food.Y)
-            {
-                snake.Point++;
-                Console.SetCursorPosition(81, 1);
-                Console.Write("Score: {0}", snake.Point * 10);
-                return true;
-            }
-            return false;
         }
 
         private bool IsOppositeDirection(ConsoleKey newDirection, ConsoleKey lastDirection)
