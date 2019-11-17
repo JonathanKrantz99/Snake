@@ -30,10 +30,10 @@ namespace Snake
         }
         public void StartGame()
         {
-            ConsoleKey keyInfo = Console.ReadKey(true).Key;
+            ConsoleKey direction = Console.ReadKey(true).Key;
             while (gameOver == false)
             {
-                Move(keyInfo);
+                Move(direction);
 
                 if (snake.CheckSelfCollision())
                 {
@@ -57,12 +57,17 @@ namespace Snake
 
                 if (Console.KeyAvailable)
                 {
-                    ConsoleKey lastKeyStroke = keyInfo;
-                    keyInfo = Console.ReadKey(true).Key;
+                    ConsoleKey lastDirection = direction;
+                    direction = Console.ReadKey(true).Key;
 
-                    if (keyInfo != ConsoleKey.W & keyInfo != ConsoleKey.A & keyInfo != ConsoleKey.S & keyInfo != ConsoleKey.D)
+                    if (direction != ConsoleKey.W & direction != ConsoleKey.A & direction != ConsoleKey.S & direction != ConsoleKey.D)
                     {
-                        keyInfo = lastKeyStroke;
+                        direction = lastDirection;
+                    }
+
+                    if (IsOppositeDirection(direction, lastDirection))
+                    {
+                        direction = lastDirection;
                     }
                 }
             }
@@ -87,79 +92,27 @@ namespace Snake
             switch (keyInfo)
             {
                 case ConsoleKey.W:
-                    if (goingDown)
-                    {
-                        Console.SetCursorPosition(snake.X[0], snake.Y[0]);
-                        Console.Write(" ");
-                        snake.Y[0]++;
-                    }
-
-                    else
-                    {
-                        Console.SetCursorPosition(snake.X[0], snake.Y[0]);
-                        Console.Write(" ");
-                        snake.Y[0]--;
-
-                        SetDirectionsToFalse();
-                        goingUp = true;
-                    }
+                    Console.SetCursorPosition(snake.X[0], snake.Y[0]);
+                    Console.Write(" ");
+                    snake.Y[0]--;
                     break;
 
                 case ConsoleKey.S:
-                    if (goingUp)
-                    {
-                        Console.SetCursorPosition(snake.X[0], snake.Y[0]);
-                        Console.Write(" ");
-                        snake.Y[0]--;
-                    }
-
-                    else
-                    {
-                        Console.SetCursorPosition(snake.X[0], snake.Y[0]);
-                        Console.Write(" ");
-                        snake.Y[0]++;
-
-                        SetDirectionsToFalse();
-                        goingDown = true;
-                    }
+                    Console.SetCursorPosition(snake.X[0], snake.Y[0]);
+                    Console.Write(" ");
+                    snake.Y[0]++;
                     break;
 
                 case ConsoleKey.A:
-                    if (goingRight)
-                    {
-                        Console.SetCursorPosition(snake.X[0], snake.Y[0]);
-                        Console.Write(" ");
-                        snake.X[0]++;
-                    }
-
-                    else
-                    {
-                        Console.SetCursorPosition(snake.X[0], snake.Y[0]);
-                        Console.Write(" ");
-                        snake.X[0]--;
-
-                        SetDirectionsToFalse();
-                        goingLeft = true;
-                    }
+                    Console.SetCursorPosition(snake.X[0], snake.Y[0]);
+                    Console.Write(" ");
+                    snake.X[0]--;
                     break;
 
                 case ConsoleKey.D:
-                    if (goingLeft)
-                    {
-                        Console.SetCursorPosition(snake.X[0], snake.Y[0]);
-                        Console.Write(" ");
-                        snake.X[0]--;
-                    }
-
-                    else
-                    {
-                        Console.SetCursorPosition(snake.X[0], snake.Y[0]);
-                        Console.Write(" ");
-                        snake.X[0]++;
-
-                        SetDirectionsToFalse();
-                        goingRight = true;
-                    }
+                    Console.SetCursorPosition(snake.X[0], snake.Y[0]);
+                    Console.Write(" ");
+                    snake.X[0]++;
                     break;
             }
         }
@@ -295,12 +248,40 @@ namespace Snake
             }
         }
 
-        private void SetDirectionsToFalse()
+        private bool IsOppositeDirection(ConsoleKey newDirection, ConsoleKey lastDirection)
         {
-            goingRight = false;
-            goingUp = false;
-            goingDown = false;
-            goingLeft = false;
+            switch (newDirection)
+            {
+                case ConsoleKey.W:
+                    if (lastDirection == ConsoleKey.S)
+                    {
+                        return true;
+                    }
+                    break;
+
+                case ConsoleKey.A:
+                    if (lastDirection == ConsoleKey.D)
+                    {
+                        return true;
+                    }
+                    break;
+
+                case ConsoleKey.S:
+                    if (lastDirection == ConsoleKey.W)
+                    {
+                        return true;
+                    }
+                    break;
+
+                case ConsoleKey.D:
+                    if (lastDirection == ConsoleKey.A)
+                    {
+                        return true;
+                    }
+                    break;
+            }
+
+            return false;
         }
     }
 }
