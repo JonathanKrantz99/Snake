@@ -12,6 +12,7 @@ namespace Snake
         public Snake snake = new Snake();
         private Food food = new Food();
         private Map map = new Map();
+        private Random random = new Random();
         private int highScore = 0;
         private bool gameOver = false;
         private bool goingUp = false;
@@ -29,7 +30,9 @@ namespace Snake
             Console.WriteLine("O");
 
             // Paint the food
-            Console.WriteLine(food);
+            Console.SetCursorPosition(food.X, food.Y);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("o");
 
             // Print the score
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -69,7 +72,7 @@ namespace Snake
 
                 if (food.IsEaten)
                 {
-                    Console.WriteLine(food);
+                    PlaceFood();
                     food.IsEaten = false;
                 }
 
@@ -187,6 +190,32 @@ namespace Snake
                     }
                     break;
             }
+        }
+
+        private void PlaceFood()
+        {
+            int testResult = 0;
+            food.X = random.Next(2, 77);
+            food.Y = random.Next(2, 26);
+
+            while (true)
+            {
+                for (int i = 0; i < snake.X.Length; i++)
+                {
+                    if (food.X == snake.X[i] & food.Y == snake.Y[i])
+                    {
+                        food.X = random.Next(2, 77);
+                        food.Y = random.Next(2, 26);
+                    }
+                    else testResult++;
+                }
+
+                if (testResult == snake.X.Length) break;
+            }
+
+            Console.SetCursorPosition(food.X, food.Y);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("o");
         }
 
         private void SaveToFile()

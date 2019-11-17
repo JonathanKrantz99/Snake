@@ -8,11 +8,10 @@ namespace Snake
 {
     class Food
     {
-        private int x;
-        private int y;
+        private int x = 30;
+        private int y = 15;
         private string snakeFood = "o";
         private bool isEaten = false;
-        private Random random = new Random();
 
         public Food()
         {
@@ -40,17 +39,5 @@ namespace Snake
         {
             get { return this.snakeFood; }
         }
-
-        public override string ToString()
-        {
-            this.X = random.Next(2, 77);
-            this.Y = random.Next(2, 26);
-
-            Console.SetCursorPosition(this.X, this.Y);
-            Console.ForegroundColor = ConsoleColor.Red;
-            return this.SnakeFood;
-        }
-        
-        
     }
 }
