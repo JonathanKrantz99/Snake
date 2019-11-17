@@ -15,14 +15,16 @@ namespace Snake
         private Random random = new Random();
         private int highScore = 0;
         private int gameSpeed = 70;
-        private List<int> scoreBoard = new List<int>();
+        private List<Player> scoreBoard = new List<Player>();
         private bool gameOver = false;
         private bool goingUp = false;
         private bool goingDown = false;
         private bool goingLeft = false;
         private bool goingRight = false;
-        public Game()
+        public Game(List<Player> scoreBoard)
         {
+            this.scoreBoard = scoreBoard;
+
             // paint the boundry
             map.PaintMap();
 
@@ -42,7 +44,7 @@ namespace Snake
             Console.WriteLine("Score: {0}", snake.Point * 10);
 
             // Print highscore
-            ReadFromFile();
+            highScore = scoreBoard[0].Score;
             Console.SetCursorPosition(81, 0);
             Console.WriteLine("Highscore: {0}", highScore);
 
@@ -90,6 +92,12 @@ namespace Snake
                 Console.WriteLine("New highscore!");
             }
             SaveToFile();
+
+            if (Program.PlayAgain())
+            {
+                Console.Clear();
+                new Game(scoreBoard);
+            }
         }
 
         public bool CheckIfFoodIsEaten()
@@ -224,14 +232,14 @@ namespace Snake
         {
             for (int i = 0; i < scoreBoard.Count; i++)
             {
-                if (snake.Point * 10 > scoreBoard[i])
+                if (snake.Point * 10 > scoreBoard[i].Score)
                 {
                     scoreBoard.RemoveAt(9);
-                    scoreBoard.Insert(i, snake.Point * 10);
                     Console.SetCursorPosition(81, 5);
                     Console.WriteLine("Enter name to save: ");
                     Console.SetCursorPosition(81, 6);
-                    Console.ReadLine();
+                    string name = Console.ReadLine();
+                    scoreBoard.Insert(i, new Player(name, snake.Point * 10));
                     break;
                 }
             }
@@ -244,42 +252,8 @@ namespace Snake
                     sparaTillFil.WriteLine(scoreBoard[i]);
                 }
             }
-
         }
 
-        private void ReadFromFile()
-        {
-            while (true)
-            {
-                try
-                {
-                    StreamReader reader = new StreamReader("HighScore.txt");
-                    using (reader)
-                    {
-                        string line = reader.ReadLine();
-                        while (line != null)
-                        {
-                            scoreBoard.Add(Convert.ToInt32(line));
-                            line = reader.ReadLine();
-                        }
-
-                        highScore = scoreBoard[0];
-                    }
-                    break;
-                }
-
-                catch (FileNotFoundException)
-                {
-                    StreamWriter sparaTillFil = new StreamWriter("HighScore.txt");
-                    using (sparaTillFil)
-                    {
-                        for (int i = 0; i < 10; i++)
-                        {
-                            sparaTillFil.WriteLine(0);
-                        }
-                    }
-                }
-            }
-        }
+        
     }
 }

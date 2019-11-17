@@ -12,19 +12,9 @@ namespace Snake
         {
             Console.SetWindowSize(109, 28);
             Console.CursorVisible = false;
-            //new Game();
 
-            //while (true)
-            //{
-            //    if (PlayAgain())
-            //    {
-            //        Console.Clear();
-            //        new Game();
-            //    }
-
-            //    else break;
-            //}
             Menu menu = new Menu();
+            menu.MenuScreen();
         }
 
         public static bool PlayAgain()
