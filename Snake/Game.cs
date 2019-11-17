@@ -184,12 +184,12 @@ namespace Snake
                 }
             }
 
-            StreamWriter sparaTillFil = new StreamWriter("HighScore.txt");
-            using (sparaTillFil)
+            StreamWriter saveToFile = new StreamWriter("HighScore.txt");
+            using (saveToFile)
             {
                 for (int i = 0; i < scoreBoard.Count; i++)
                 {
-                    sparaTillFil.WriteLine(scoreBoard[i]);
+                    saveToFile.WriteLine(scoreBoard[i]);
                 }
             }
         }
