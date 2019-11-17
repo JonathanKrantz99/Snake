@@ -14,22 +14,18 @@ namespace Snake
         private Map map = new Map();
         private Random random = new Random();
         private List<Player> scoreBoard = new List<Player>();
-        private int highScore = 0;
-        private int gameSpeed = 70;
         private bool gameOver = false;
-        private bool goingUp = false;
-        private bool goingDown = false;
-        private bool goingLeft = false;
-        private bool goingRight = false;
+        private int gameSpeed = 70;
+
         public Game(List<Player> scoreBoard)
         {
             this.scoreBoard = scoreBoard;
-
-            InitiateGame();
-            StartGame();
         }
+
         public void StartGame()
         {
+            InitiateGame();
+
             ConsoleKey direction = Console.ReadKey(true).Key;
             while (gameOver == false)
             {
@@ -72,7 +68,7 @@ namespace Snake
                 }
             }
 
-            if (snake.Point * 10 > highScore)
+            if (snake.Point * 10 > scoreBoard[0].Score)
             {
                 Console.SetCursorPosition(86, 3);
                 Console.WriteLine("New highscore!");
@@ -82,9 +78,34 @@ namespace Snake
 
             if (PlayAgain())
             {
-                Console.Clear();
-                new Game(scoreBoard);
+                ResetGame();
+                StartGame();
             }
+        }
+
+        private void InitiateGame()
+        {
+            // paint the boundry
+            map.PaintMap();
+
+            // Paint the snake head
+            Console.SetCursorPosition(snake.X[0], snake.Y[0]);
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("O");
+
+            // Paint the food
+            Console.SetCursorPosition(food.X, food.Y);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("o");
+
+            // Print the score
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.SetCursorPosition(81, 1);
+            Console.WriteLine("Score: {0}", snake.Point * 10);
+
+            // Print highscore
+            Console.SetCursorPosition(81, 0);
+            Console.WriteLine("Highscore: {0} by {1}", scoreBoard[0].Score, scoreBoard[0].Name);
         }
 
         private void Move(ConsoleKey keyInfo)
@@ -155,99 +176,6 @@ namespace Snake
             Console.WriteLine("o");
         }
 
-        private void SaveToFile()
-        {
-            for (int i = 0; i < scoreBoard.Count; i++)
-            {
-                if (snake.Point * 10 > scoreBoard[i].Score)
-                {
-                    scoreBoard.RemoveAt(9);
-                    Console.SetCursorPosition(81, 5);
-                    Console.WriteLine("Enter name to save: ");
-                    Console.SetCursorPosition(81, 6);
-                    string name = Console.ReadLine();
-                    scoreBoard.Insert(i, new Player(name, snake.Point * 10));
-                    break;
-                }
-            }
-
-            StreamWriter sparaTillFil = new StreamWriter("HighScore.txt");
-            using (sparaTillFil)
-            {
-                for (int i = 0; i < scoreBoard.Count; i++)
-                {
-                    sparaTillFil.WriteLine(scoreBoard[i]);
-                }
-            }
-        }
-
-        private void InitiateGame()
-        {
-            // paint the boundry
-            map.PaintMap();
-
-            // Paint the snake head
-            Console.SetCursorPosition(snake.X[0], snake.Y[0]);
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("O");
-
-            // Paint the food
-            Console.SetCursorPosition(food.X, food.Y);
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("o");
-
-            // Print the score
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.SetCursorPosition(81, 1);
-            Console.WriteLine("Score: {0}", snake.Point * 10);
-
-            // Print highscore
-            highScore = scoreBoard[0].Score;
-            Console.SetCursorPosition(81, 0);
-            Console.WriteLine("Highscore: {0}", highScore);
-        }
-
-        private bool PlayAgain()
-        {
-            Console.SetCursorPosition(81, 5);
-            Console.WriteLine("Do you want to play again?");
-
-            Console.SetCursorPosition(81, 6);
-            Console.WriteLine("Press 1 for yes");
-
-            Console.SetCursorPosition(81, 7);
-            Console.WriteLine("Press 2 for no");
-
-            ConsoleKey answer = Console.ReadKey(true).Key;
-
-            while (true)
-            {
-                if (answer == ConsoleKey.D1)
-                {
-                    return true;
-                }
-
-                else if (answer == ConsoleKey.D2)
-                {
-                    return false;
-                }
-
-                else
-                {
-                    Console.SetCursorPosition(81, 5);
-                    Console.WriteLine("Do you want to play again?");
-
-                    Console.SetCursorPosition(81, 6);
-                    Console.WriteLine("1. Yes");
-
-                    Console.SetCursorPosition(81, 7);
-                    Console.WriteLine("2. No");
-
-                    answer = Console.ReadKey(true).Key;
-                }
-            }
-        }
-
         private bool IsOppositeDirection(ConsoleKey newDirection, ConsoleKey lastDirection)
         {
             switch (newDirection)
@@ -282,6 +210,80 @@ namespace Snake
             }
 
             return false;
+        }
+
+        private void SaveToFile()
+        {
+            for (int i = 0; i < scoreBoard.Count; i++)
+            {
+                if (snake.Point * 10 > scoreBoard[i].Score)
+                {
+                    scoreBoard.RemoveAt(9);
+                    Console.SetCursorPosition(81, 5);
+                    Console.WriteLine("Enter name to save: ");
+                    Console.SetCursorPosition(81, 6);
+                    string name = Console.ReadLine();
+                    scoreBoard.Insert(i, new Player(name, snake.Point * 10));
+                    break;
+                }
+            }
+
+            StreamWriter sparaTillFil = new StreamWriter("HighScore.txt");
+            using (sparaTillFil)
+            {
+                for (int i = 0; i < scoreBoard.Count; i++)
+                {
+                    sparaTillFil.WriteLine(scoreBoard[i]);
+                }
+            }
+        }
+
+        private bool PlayAgain()
+        {
+            Console.SetCursorPosition(81, 5);
+            Console.WriteLine("Do you want to play again?");
+
+            Console.SetCursorPosition(81, 6);
+            Console.WriteLine("Press 1 for yes");
+
+            Console.SetCursorPosition(81, 7);
+            Console.WriteLine("Press 2 for no");
+
+            ConsoleKey answer = Console.ReadKey(true).Key;
+
+            while (true)
+            {
+                if (answer == ConsoleKey.D1)
+                {
+                    return true;
+                }
+
+                else if (answer == ConsoleKey.D2)
+                {
+                    return false;
+                }
+
+                else
+                {
+                    Console.SetCursorPosition(81, 5);
+                    Console.WriteLine("Do you want to play again?");
+
+                    Console.SetCursorPosition(81, 6);
+                    Console.WriteLine("Press 1 for yes");
+
+                    Console.SetCursorPosition(81, 7);
+                    Console.WriteLine("Press 2 for no");
+
+                    answer = Console.ReadKey(true).Key;
+                }
+            }
+        }
+
+        private void ResetGame()
+        {
+            snake = new Snake();
+            gameSpeed = 70;
+            gameOver = false;
         }
     }
 }

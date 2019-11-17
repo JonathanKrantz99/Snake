@@ -40,7 +40,8 @@ namespace Snake
             switch (choice)
             {
                 case ConsoleKey.D1:
-                    new Game(scoreBoard);
+                    Game snake = new Game(scoreBoard);
+                    snake.StartGame();
                     MenuScreen();
                     break;
 
@@ -55,6 +56,10 @@ namespace Snake
                     break;
 
                 case ConsoleKey.D4:
+                    break;
+
+                default:
+                    MenuScreen();
                     break;
             }
         }
@@ -72,6 +77,8 @@ namespace Snake
             Console.WriteLine("If you crash into the wall, you loose");
             Console.SetCursorPosition(34, 6);
             Console.WriteLine("If you crash into your own tail, you loose");
+            Console.SetCursorPosition(34, 8);
+            Console.WriteLine("Press any key to return..");
             Console.ReadKey();
         }
 
