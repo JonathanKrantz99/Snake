@@ -12,7 +12,6 @@ namespace Snake
         public Snake snake = new Snake();
         private Food food = new Food();
         private Map map = new Map();
-        private Random random = new Random();
         private List<Player> scoreBoard = new List<Player>();
         private bool gameOver = false;
         private int gameSpeed = 70;
@@ -45,7 +44,7 @@ namespace Snake
 
                 if (CheckIfFoodIsEaten())
                 {
-                    PlaceFood();
+                    food.PlaceFood(snake.X, snake.Y);
                     gameSpeed -= 1;
                 }
 
@@ -148,32 +147,6 @@ namespace Snake
                 return true;
             }
             return false;
-        }
-
-        private void PlaceFood()
-        {
-            int testResult = 0;
-            food.X = random.Next(2, 77);
-            food.Y = random.Next(2, 26);
-
-            while (true)
-            {
-                for (int i = 0; i < snake.X.Length; i++)
-                {
-                    if (food.X == snake.X[i] & food.Y == snake.Y[i])
-                    {
-                        food.X = random.Next(2, 77);
-                        food.Y = random.Next(2, 26);
-                    }
-                    else testResult++;
-                }
-
-                if (testResult == snake.X.Length) break;
-            }
-
-            Console.SetCursorPosition(food.X, food.Y);
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("o");
         }
 
         private bool IsOppositeDirection(ConsoleKey newDirection, ConsoleKey lastDirection)
