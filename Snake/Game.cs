@@ -14,6 +14,7 @@ namespace Snake
         private Map map = new Map();
         private Random random = new Random();
         private int highScore = 0;
+        private int gameSpeed = 70;
         private bool gameOver = false;
         private bool goingUp = false;
         private bool goingDown = false;
@@ -68,6 +69,7 @@ namespace Snake
                 if (CheckIfFoodIsEaten())
                 {
                     food.IsEaten = true;
+                    gameSpeed -= 1;
                 }
 
                 if (food.IsEaten)
@@ -76,7 +78,7 @@ namespace Snake
                     food.IsEaten = false;
                 }
 
-                System.Threading.Thread.Sleep(70);
+                System.Threading.Thread.Sleep(gameSpeed);
 
                 if (Console.KeyAvailable) keyInfo = Console.ReadKey(true).Key;
             }
