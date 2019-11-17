@@ -15,6 +15,7 @@ namespace Snake
         private Random random = new Random();
         private int highScore = 0;
         private int gameSpeed = 70;
+        private List<int> scoreBoard = new List<int>();
         private bool gameOver = false;
         private bool goingUp = false;
         private bool goingDown = false;
@@ -83,12 +84,11 @@ namespace Snake
                 if (Console.KeyAvailable) keyInfo = Console.ReadKey(true).Key;
             }
 
-            if(snake.Point*10 > highScore)
+            if (snake.Point * 10 > highScore)
             {
                 Console.SetCursorPosition(86, 3);
                 Console.WriteLine("New highscore!");
             }
-
             SaveToFile();
         }
 
@@ -98,7 +98,7 @@ namespace Snake
             {
                 snake.Point++;
                 Console.SetCursorPosition(81, 1);
-                Console.Write("Score: {0}", snake.Point*10);
+                Console.Write("Score: {0}", snake.Point * 10);
                 return true;
             }
             return false;
@@ -222,34 +222,62 @@ namespace Snake
 
         private void SaveToFile()
         {
-            if(snake.Point*10 > highScore)
+            for (int i = 0; i < scoreBoard.Count; i++)
             {
-                StreamWriter sparaTillFil = new StreamWriter("HighScore.txt");
-                using (sparaTillFil)
+                if (snake.Point * 10 > scoreBoard[i])
                 {
-                    sparaTillFil.WriteLine(snake.Point * 10);
+                    scoreBoard.RemoveAt(9);
+                    scoreBoard.Insert(i, snake.Point * 10);
+                    Console.SetCursorPosition(81, 5);
+                    Console.WriteLine("Enter name to save: ");
+                    Console.SetCursorPosition(81, 6);
+                    Console.ReadLine();
+                    break;
                 }
             }
+
+            StreamWriter sparaTillFil = new StreamWriter("HighScore.txt");
+            using (sparaTillFil)
+            {
+                for (int i = 0; i < scoreBoard.Count; i++)
+                {
+                    sparaTillFil.WriteLine(scoreBoard[i]);
+                }
+            }
+
         }
 
         private void ReadFromFile()
         {
-            try
+            while (true)
             {
-                StreamReader reader = new StreamReader("HighScore.txt");
-                using (reader)
+                try
                 {
-                    string line = reader.ReadLine();
-                    highScore = Convert.ToInt32(line);
+                    StreamReader reader = new StreamReader("HighScore.txt");
+                    using (reader)
+                    {
+                        string line = reader.ReadLine();
+                        while (line != null)
+                        {
+                            scoreBoard.Add(Convert.ToInt32(line));
+                            line = reader.ReadLine();
+                        }
+
+                        highScore = scoreBoard[0];
+                    }
+                    break;
                 }
-            }
-            
-            catch (FileNotFoundException)
-            {
-                StreamWriter sparaTillFil = new StreamWriter("HighScore.txt");
-                using (sparaTillFil)
+
+                catch (FileNotFoundException)
                 {
-                    sparaTillFil.WriteLine(snake.Point * 10);
+                    StreamWriter sparaTillFil = new StreamWriter("HighScore.txt");
+                    using (sparaTillFil)
+                    {
+                        for (int i = 0; i < 10; i++)
+                        {
+                            sparaTillFil.WriteLine(0);
+                        }
+                    }
                 }
             }
         }

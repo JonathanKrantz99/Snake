@@ -12,30 +12,31 @@ namespace Snake
         {
             Console.SetWindowSize(109, 28);
             Console.CursorVisible = false;
-            new Game();
+            //new Game();
 
-            while (true)
-            {
-                if (PlayAgain())
-                {
-                    Console.Clear();
-                    new Game();
-                }
+            //while (true)
+            //{
+            //    if (PlayAgain())
+            //    {
+            //        Console.Clear();
+            //        new Game();
+            //    }
 
-                else break;
-            }
+            //    else break;
+            //}
+            Menu menu = new Menu();
         }
 
-        private static bool PlayAgain()
+        public static bool PlayAgain()
         {
             Console.SetCursorPosition(81, 5);
             Console.WriteLine("Do you want to play again?");
 
             Console.SetCursorPosition(81, 6);
-            Console.WriteLine("1. Yes");
+            Console.WriteLine("Press 1 for yes");
 
             Console.SetCursorPosition(81, 7);
-            Console.WriteLine("2. No");
+            Console.WriteLine("Press 2 for no");
 
             ConsoleKey answer = Console.ReadKey(true).Key;
 
